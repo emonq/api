@@ -20,9 +20,9 @@ async def addgroup(group,url,response:Response):
     try:
         res=requests.get(url)
         if res.status_code!=200:
-            response.status_code=status.HTTP_400_BAD_REQUEST
+            raise HTTPException(status_code=400,detail="check your url")
         res=str(res.content,encoding='UTF-8')
         res=re.sub("tag=","tag=%s "%group,res)
-        return Response(res, media_type="application/text")
+        return Response(res)
     except Exception as ex:
-        response.status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        raise HTTPException(status_code=500,detail=str(ex))
