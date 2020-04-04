@@ -6,7 +6,7 @@ Read api docs [HERE](https://api.emonq.com:8000/docs)
 ## Futures
    - [x] **addgroup**: Add group name for QuantumultX subscriptions to avoid nodes confliction.
 
-   More is coming soon...
+   More are coming soon...
 ## Usage
    1. Install requirements with 
       > `pip install -r requirements.txt`
