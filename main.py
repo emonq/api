@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Response,HTTPException,status
+from fastapi import FastAPI,Response,HTTPException,status,Request
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 import requests
 import re
@@ -23,6 +23,36 @@ async def addgroup(group,url,response:Response):
             raise HTTPException(status_code=400,detail="check your url")
         res=str(res.content,encoding='UTF-8')
         res=re.sub("tag=","tag=%s "%group,res)
-        return Response(res)
+        return res
     except Exception as ex:
         raise HTTPException(status_code=500,detail=str(ex))
+
+@app.get("/ddns")
+async def ddns(username:str,password:str,domain:str,request:Request,response:Response,ip:str=None):
+    """
+    Update Google DDNS for somewhere cannot visit Google
+
+    args:
+
+    - **username**
+    - **password**
+    - **domain**
+    - **ip**
+    \f
+    """
+    if ip==None:
+        ip=request.client.host
+    try:
+        res=requests.post(
+            url="https://%s:%s@domains.google.com/nic/update"%(username,password),
+            data={"hostname":domain,"myip":ip},
+            headers={"User-Agent":"myddns","Authorization":"Basic base64-encoded-auth-string"}
+            )
+        return "OK"
+    except Exception as ex:
+        raise HTTPException(status_code=500,detail=str(ex))
+
+if __name__ == "__main__":
+    import os
+    command = 'uvicorn main:app --reload'
+    os.system(command)
