@@ -13,4 +13,4 @@ You can visit [here](https://api.emonq.com/docs) to see the demo
       > `pip install -r requirements.txt`
    2. Run
       
-       > python main.py
+       > gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
