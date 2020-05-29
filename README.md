@@ -1,7 +1,9 @@
 # apis written with Python and [FastAPI](https://github.com/tiangolo/fastapi)
 
+You can visit [here](https://api.emonq.com/docs) to see the demo
 
-## Futures
+## Features
+
    - [x] **addgroup**: Add group name for QuantumultX subscriptions to avoid nodes confliction.
    - [x] **ddns**: Work as a proxy to Google DDNS
 

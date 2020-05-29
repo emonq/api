@@ -41,18 +41,16 @@ async def ddns(username:str,password:str,domain:str,request:Request,response:Res
     \f
     """
     if ip==None:
-        ip=request.client.host
+        try:
+            ip=request.headers['X-Forwarded-For'].split(',')[0]
+        except Exception as ex:
+            ip=request.client.host
     try:
         res=requests.post(
             url="https://%s:%s@domains.google.com/nic/update"%(username,password),
             data={"hostname":domain,"myip":ip},
             headers={"User-Agent":"myddns","Authorization":"Basic base64-encoded-auth-string"}
             )
-        return "OK"
+        return str(res.content,encoding='UTF-8')
     except Exception as ex:
         raise HTTPException(status_code=500,detail=str(ex))
-
-if __name__ == "__main__":
-    import os
-    command = 'uvicorn main:app --reload'
-    os.system(command)
