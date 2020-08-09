@@ -54,3 +54,21 @@ async def ddns(username:str,password:str,domain:str,request:Request,response:Res
         return str(res.content,encoding='UTF-8')
     except Exception as ex:
         raise HTTPException(status_code=500,detail=str(ex))
+
+@app.get("/fetch",response_model=str)
+async def fetch(url):
+    '''
+        work as a relay
+
+        args:
+
+        - **url**
+        \f
+    '''
+    try:
+        res=requests.get(url)
+        if res.status_code!=200:
+            raise HTTPException(status_code=res.status_code, details=res.text)
+        return Response(content=res.content.decode(),media_type="application/octet-stream; charset=utf-8")
+    except Exception as e:
+        raise HTTPException(status_code=500, details=str(e))
